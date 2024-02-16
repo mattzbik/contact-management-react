@@ -1,6 +1,6 @@
 import { Contact } from '@/models/contact';
 
-export const contacts: Contact[] = [
+export const mockContacts: Contact[] = [
   {
     id: 1,
     firstName: 'Luke',
