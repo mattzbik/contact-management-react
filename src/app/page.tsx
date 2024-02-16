@@ -1,38 +1,64 @@
 'use client';
-import { mockContacts } from '@/mocks/contact';
-import { Contact } from '@/models/contact';
-import { Button, Container, Grid, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useContactContext } from '@/context/context';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography,
+} from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const [contacts, setContacts] = useState<Contact[]>(mockContacts);
-
-  const handleDelete = (id: number) => {
-    setContacts(contacts.filter((c) => c.id !== id));
-  };
+  const { contacts, setContacts } = useContactContext();
+  const router = useRouter();
 
   return (
-    <Container>
-      <Typography variant="h1">Main Page</Typography>
-      <Typography mb={2}>List of Contacts</Typography>
-      <Grid container spacing={2}>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h1">Main Page</Typography>
+      </Grid>
+      <Grid container item xs={12} spacing={2}>
         {contacts.map((c) => (
-          <Grid key={c.id} item xs={12}>
-            <Typography>First Name: {c.firstName}</Typography>
-            <Typography>
-              Last Name:{' '}
-              {c.lastName ?? ' This contact does not have a last name.'}
-            </Typography>
-            <Typography>Email: {c.email}</Typography>
-            <Stack direction="row" spacing={2}>
-              <Button variant="contained">Edit Contact</Button>
-              <Button variant="contained" onClick={() => handleDelete(c.id)}>
-                Remove Contact
-              </Button>
-            </Stack>
+          <Grid key={c.id} item xs={12} sm={6} md={4} lg={3}>
+            <Card raised>
+              <CardContent>
+                <Typography>First Name: {c.firstName}</Typography>
+                <Typography>
+                  Last Name:{' '}
+                  {c.lastName ?? ' This contact does not have a last name.'}
+                </Typography>
+                <Typography>Email: {c.email}</Typography>
+              </CardContent>
+              <CardActions>
+                <Button variant="contained" fullWidth>
+                  Edit Contact
+                </Button>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() =>
+                    setContacts(contacts.filter((con) => c.id !== con.id))
+                  }
+                >
+                  Remove Contact
+                </Button>
+              </CardActions>
+            </Card>
           </Grid>
         ))}
       </Grid>
-    </Container>
+      <Grid item mt={4}>
+        <Button
+          variant="contained"
+          sx={{ a: { textDecoration: 'none', color: 'inherit' } }}
+          onClick={() => router.push('/create/contact')}
+        >
+          <Link href="/create/contact">Create New Contact</Link>
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
