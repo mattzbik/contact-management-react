@@ -1,5 +1,6 @@
 'use client';
 import { useContactContext } from '@/context/context';
+import { Delete, Edit } from '@mui/icons-material';
 import {
   Button,
   Card,
@@ -33,12 +34,18 @@ export default function Home() {
                 <Typography>Email: {c.email}</Typography>
               </CardContent>
               <CardActions>
-                <Button variant="contained" fullWidth>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  startIcon={<Edit />}
+                  onClick={() => router.push(`/edit/contact/${c.id}`)}
+                >
                   Edit Contact
                 </Button>
                 <Button
                   variant="contained"
                   fullWidth
+                  startIcon={<Delete />}
                   onClick={() =>
                     setContacts(contacts.filter((con) => c.id !== con.id))
                   }
@@ -54,6 +61,7 @@ export default function Home() {
         <Button
           variant="contained"
           sx={{ a: { textDecoration: 'none', color: 'inherit' } }}
+          startIcon={<Edit />}
           onClick={() => router.push('/create/contact')}
         >
           <Link href="/create/contact">Create New Contact</Link>
